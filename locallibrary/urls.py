@@ -13,9 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
+from django.views.generic import RedirectView
+from django.conf.urls.static import static
+
+
+
 
 urlpatterns = [
+# The default urlpattern added by Django
     url(r'^admin/', admin.site.urls),
-]
+
+# Use include() to add URLS from the catalog application
+    url(r'^catalog/', include('catalog.urls')),
+
+#Add URL maps to redirect the base URL to our application
+    url(r'^$', RedirectView.as_view(url='/catalog/', permanent=True)),
+
+# Use static() to add url mapping to serve static files during development (only)
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
